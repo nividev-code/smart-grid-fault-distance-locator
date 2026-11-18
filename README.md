@@ -121,12 +121,19 @@ The page polls `/data` every 500 ms. Available endpoints:
 | `GET /reset` | Clear the trip and restore healthy state after the settling delay |
 | `GET /sim?mode=0..4` | Select real ADC readings, Pole 1, Pole 2, Pole 3, or overcurrent simulation |
 
+## Source files
+
+- [`firmware/smart_grid_hardware_controller/smart_grid_hardware_controller.ino`](firmware/smart_grid_hardware_controller/smart_grid_hardware_controller.ino) — ESP32 controller firmware.
+- [`docs/smart_grid_scada_control_panel.txt`](docs/smart_grid_scada_control_panel.txt) — supplied text outline for the dashboard's visible content and controls.
+
+The supplied sketch is sanitized for sharing: replace the placeholder Wi-Fi SSID/password and alert phone number before use. It currently configures the access point at `10.84.27.1`; the master specification instead documents `192.168.4.1`, so use the address configured in the sketch (or change `AP_IP`, `AP_GATEWAY`, and the URL together). The sketch's embedded `INDEX_HTML` is still a minimal placeholder, and the `.txt` dashboard outline is not HTML; the full interactive dashboard page still needs to be implemented and inserted before the browser UI will match the described controls.
+
 ## Getting started
 
 1. Assemble and check the low-voltage ladder, grounds, and LED resistors against the pin map.
-2. Upload the firmware to an ESP32 DevKit V1 using an ESP32 Arduino core supported by the project. Preserve the ADC1 assignments and `analogSetAttenuation(ADC_11db)` configuration.
+2. Open `firmware/smart_grid_hardware_controller/smart_grid_hardware_controller.ino` in Arduino IDE and upload it to an ESP32 DevKit V1 using a supported ESP32 Arduino core. Preserve the ADC1 assignments and `analogSetAttenuation(ADC_11db)` configuration.
 3. Power the board from a suitable USB supply, then connect a phone or laptop to the ESP32 access point.
-4. Open `http://192.168.4.1/` and confirm the healthy state and expected tap voltages.
+4. Open the configured access-point address in a browser (`http://10.84.27.1/` with the supplied sketch) and confirm the healthy state and expected tap voltages.
 5. Use the dashboard simulator to demonstrate each fault. To demonstrate a physical open-line event, remove one jumper at a time and observe the reported zone, distance, breaker, and indicators.
 6. Reset from the dashboard before the next demonstration.
 
